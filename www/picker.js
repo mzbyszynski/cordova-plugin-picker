@@ -54,4 +54,4 @@ var CDVPicker = (function() {
   }
 })();
 
-console.log("don'e loading picker.js");
+module.exports = CDVPicker;
