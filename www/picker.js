@@ -38,7 +38,7 @@ var CDVPicker = (function() {
           scope.onError(result.error);
         }
       };
-      cordova.exec(win, this.onError, "CDVPicker", "show", [(scope._options || [])]);
+      cordova.exec(win, this.onError, "Picker", "show", [(scope._options || [])]);
     }
   };
 
@@ -46,7 +46,7 @@ var CDVPicker = (function() {
   return {
     echo: function(msg, success, failure) {
       console.log("Invoking CDVPicker.echo");
-      cordova.exec(success, failure, "CDVPicker", "echo", [msg]);
+      cordova.exec(success, failure, "Picker", "echo", [msg]);
     },
     create: function() {
       return new Picker();
