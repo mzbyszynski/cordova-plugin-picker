@@ -74,11 +74,19 @@
     [self.pickerViewTextField becomeFirstResponder];
 }
 
-- (void)cancelTouched:(UIBarButtonItem *)sender
-{
-    // hide the picker view
+-(void)hidePicker {
     [self.pickerViewTextField resignFirstResponder];
     [self.plugin onPickerClose: [NSNumber numberWithLong:selectedRow] inComponent: [NSNumber numberWithLong:selectedComponent]];
+}
+
+-(void)refreshChoics {
+    if (self.pickerView != nil)
+        [self.pickerView reloadAllComponents];
+}
+
+- (void)cancelTouched:(UIBarButtonItem *)sender
+{
+    [self hidePicker];
 }
 
 #pragma mark - UIPickerViewDataSource

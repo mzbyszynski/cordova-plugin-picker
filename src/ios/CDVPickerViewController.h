@@ -17,6 +17,10 @@
 
 -(void)showPicker;
 
+-(void)hidePicker;
+
 -(void)selectRow:(int)row inComponent:(NSInteger)component animated:(BOOL)animated;
+
+-(void)refreshChoics;
 
 @end

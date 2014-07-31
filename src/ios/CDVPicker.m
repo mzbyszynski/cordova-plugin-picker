@@ -38,6 +38,44 @@
 -(void) show:(CDVInvokedUrlCommand*)command {
     _callbackId = command.callbackId;
     NSArray *options = [command.arguments objectAtIndex:0];
+    [self pushOptionChanges:options];
+    // can't run code that shows keyboard in background thread because it need a web lock on the main/web thread.
+    [self.pickerController showPicker];
+    [self.commandDelegate runInBackground:^{
+        CDVPluginResult* pluginResult = [self buildResult:@"show" keepCallback:YES];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
+
+-(void) hide:(CDVInvokedUrlCommand*)command {
+    _callbackId = command.callbackId;
+    [self.pickerController hidePicker];
+}
+
+-(void) updateOptions:(CDVInvokedUrlCommand*)command {
+    _callbackId = command.callbackId;
+    NSArray *options = [command.arguments objectAtIndex:0];
+    [self pushOptionChanges:options];
+    [self.pickerController refreshChoics];
+    if (_callbackId != nil) {
+        [self.commandDelegate runInBackground:^{
+            CDVPluginResult* pluginResult = [self buildResult:@"change" keepCallback:YES];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
+        }];
+    }
+}
+
+-(void) onPickerClose:(NSNumber*)row inComponent:(NSNumber*)component {
+    if (_callbackId != nil) {
+        [self.commandDelegate runInBackground:^{
+            CDVPluginResult* pluginResult = [self buildResult:@"close" keepCallback:NO withRow:row inComponent:component];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
+            _callbackId = nil;
+        }];
+    }
+}
+
+-(void) pushOptionChanges:(NSArray*)options {
     self.pickerController.choices = options;
     for (int i = 0; i < options.count; i++) {
         NSDictionary *opt = [options objectAtIndex:i];
@@ -46,24 +84,14 @@
             [self.pickerController selectRow:i inComponent:0 animated:YES];
         }
     }
-
-    [self.pickerController showPicker];
-    CDVPluginResult* pluginResult = [self buildResult:@"show" keepCallback:YES];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-
--(void) onPickerClose:(NSNumber*)row inComponent:(NSNumber*)component {
-    if (_callbackId != nil) {
-        CDVPluginResult* pluginResult = [self buildResult:@"close" keepCallback:NO withRow:row inComponent:component];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
-        _callbackId = nil;
-    }
 }
 
 -(void) onPickerSelectionChange:(NSNumber*)row inComponent:(NSNumber*)component {
     if (_callbackId != nil) {
-        CDVPluginResult* pluginResult = [self buildResult:@"select" keepCallback:YES withRow:row inComponent:component];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
+        [self.commandDelegate runInBackground:^{
+            CDVPluginResult* pluginResult = [self buildResult:@"select" keepCallback:YES withRow:row inComponent:component];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
+        }];
     }
 }
 
@@ -72,7 +100,7 @@
 }
 
 -(CDVPluginResult*)buildResult:(NSString*)event keepCallback:(BOOL)keep withRow:(NSNumber*)row inComponent:(NSNumber*)component {
-  
+    
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     [result setObject:event forKey:@"event"];
     if (row != nil)

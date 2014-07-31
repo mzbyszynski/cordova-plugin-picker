@@ -17,6 +17,8 @@
 
 -(void) echo:(CDVInvokedUrlCommand*)command;
 -(void) show:(CDVInvokedUrlCommand*)command;
+-(void) hide:(CDVInvokedUrlCommand*)command;
+-(void) updateOptions:(CDVInvokedUrlCommand*)command;
 -(void) onPickerClose:(NSNumber*)row inComponent:(NSNumber*)component;
 -(void) onPickerSelectionChange:(NSNumber*)row inComponent:(NSNumber*)component;
 
