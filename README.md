@@ -25,3 +25,16 @@ Analagous to a &lt;select&gt; element instance, this object allows you to set `O
   picker.show();
   picker.hide();
 ```
+
+## Properties
+- __options__:
+
+## Methdods
+- __show__:
+- __hide__:
+
+## Callbacks
+
+- __onShow__: 
+- __onClose__:
+- __onSelect__:
