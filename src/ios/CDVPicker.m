@@ -37,7 +37,11 @@
 // shows the picker
 -(void) show:(CDVInvokedUrlCommand*)command {
     _callbackId = command.callbackId;
-    NSArray *options = [command.arguments objectAtIndex:0];
+    NSArray* options = [command.arguments objectAtIndex:0];
+    if (command.arguments.count > 1)
+        self.pickerController.titleProperty = [command.arguments objectAtIndex:1 withDefault:@"text"];
+    else
+        self.pickerController.titleProperty = @"text";
     [self pushOptionChanges:options];
     // can't run code that shows keyboard in background thread because it need a web lock on the main/web thread.
     [self.pickerController showPicker];

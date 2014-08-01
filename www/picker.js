@@ -40,6 +40,14 @@ module.exports = (function() {
   Picker.prototype = {
 
     /**
+     * The name of the property on an option object that should be read to display 
+     * 
+     * @class Picker
+     * @property optionTitle
+     */
+    optionTitle: "text",
+
+    /**
      * @class Picker
      * @property options
      */
@@ -78,7 +86,7 @@ module.exports = (function() {
      */
     show: function() {
       console.log('showing picker');
-      cordova.exec(win.bind(this), this.onError, 'Picker', 'show', [(this._options || [])]);
+      cordova.exec(win.bind(this), this.onError, 'Picker', 'show', [(this._options || []), this.optionTitle]);
     },
 
     /**

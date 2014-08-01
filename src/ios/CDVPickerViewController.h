@@ -14,6 +14,7 @@
 
 @property (strong,nonatomic) CDVPicker* plugin;
 @property (strong, nonatomic) NSArray* choices;
+@property (strong, nonatomic) NSString* titleProperty;
 
 -(void)showPicker;
 

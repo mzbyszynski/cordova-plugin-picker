@@ -28,6 +28,7 @@
 @synthesize pickerViewTextField = _pickerViewTextField;
 @synthesize choices = _choices;
 @synthesize pickerView = _pickerView;
+@synthesize titleProperty = _titleProperty;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -37,6 +38,7 @@
         selectedRow = 0;
         selectedComponent = 0;
         animateSelection = YES;
+        self.titleProperty = @"text";
     }
     return self;
 }
@@ -104,7 +106,7 @@
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     NSDictionary *item = [self.choices objectAtIndex:row];
-    return [item objectForKey:@"text"];
+    return [item objectForKey:self.titleProperty];
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
