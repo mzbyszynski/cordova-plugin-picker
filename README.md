@@ -16,8 +16,9 @@ displays the PickerView by assigning First Responder to a hiddent field rather t
 
 ## Roadmap
 * 1.0:
-*1. Full Documentation.
-*2. Next/Previous buttons with callbacks.
+  1. Full Documentation.
+  2. Optional Next/Previous buttons with callbacks.
+  3. configuration options for option display text property.
 
 # Supported Platforms
 - ios
