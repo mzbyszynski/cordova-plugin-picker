@@ -40,7 +40,7 @@ module.exports = (function() {
     for (var i = 0; i < htmlOptions.length; i++) {
       out.push({text: htmlOptions[i].text});
     }
-    console.out("pushing " + out.length + " options to picker controller");
+    console.log("pushing " + out.length + " options to picker controller");
     return out;
   };
 
