@@ -46,7 +46,7 @@ Analagous to a &lt;select&gt; element instance, this object allows you to set `O
 ## Properties
 - __options__:
 
-## Methdods
+## Methods
 - __show__:
 - __hide__:
 
