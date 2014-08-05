@@ -109,6 +109,8 @@ module.exports = (function() {
      */
     update: function(newOptions, resetSelection) {
       this._htmlOptions = newOptions || this._htmlOptions;
+      if (newOptions == undefined || newOptions.length === 0)
+        return;
       if (resetSelection || !this._focusedIndex)
         this._focusedIndex = this._htmlOptions.selectedIndex;
       this._options = [];
