@@ -8,9 +8,7 @@ module.exports = (function() {
    * @class Picker
    * @constructor
    */
-  function Picker() {
-    this._options = [];
-  }
+  function Picker() {}
 
   var win = function(result) {
     console.log('win returned ' + result.event + ' with row ' + result.row + ' and component ' + result.component);
@@ -37,15 +35,15 @@ module.exports = (function() {
       this.onError(result.error);
   };
 
-  Picker.prototype = {
+  var translateToNative = function(htmlOptions) {
+    var out = [];
+    for (var i = 0; i < htmlOptions.length; i++) {
+      out.push({text: htmlOptions[i].text});
+    }
+    return out;
+  };
 
-    /**
-     * The name of the property on an option object that should be read to display 
-     * 
-     * @class Picker
-     * @property optionTitle
-     */
-    optionTitle: "text",
+  Picker.prototype = {
 
     /**
      * @class Picker
@@ -86,7 +84,7 @@ module.exports = (function() {
      */
     show: function() {
       console.log('showing picker');
-      cordova.exec(win.bind(this), this.onError, 'Picker', 'show', [this._options, (this._focusedIndex || this._htmlOptions.selectedIndex || 0)]);
+      cordova.exec(win.bind(this), this.onError, 'Picker', 'show', [translateToNative(this._htmlOptions), (this._focusedIndex || this._htmlOptions.selectedIndex || 0)]);
     },
 
     /**
@@ -109,15 +107,11 @@ module.exports = (function() {
      */
     update: function(newOptions, resetSelection) {
       this._htmlOptions = newOptions || this._htmlOptions;
-      if (newOptions == undefined || newOptions.length === 0)
+      if (newOptions === undefined || newOptions.length === 0)
         return;
       if (resetSelection || !this._focusedIndex)
         this._focusedIndex = this._htmlOptions.selectedIndex;
-      this._options = [];
-      for (var i = 0; i < this._htmlOptions.length; i++) {
-        this._options.push({text: this._htmlOptions[i].text});
-      }
-      cordova.exec(win.bind(this), this.onError, 'Picker', 'updateOptions', [this._options, (this._focusedIndex || this._htmlOptions.selectedIndex || 0)]);
+      cordova.exec(win.bind(this), this.onError, 'Picker', 'updateOptions', [translateToNative(this._htmlOptions), (this._focusedIndex || this._htmlOptions.selectedIndex || 0)]);
     }
   };
 
@@ -138,5 +132,5 @@ module.exports = (function() {
     create: function() {
       return new Picker();
     }
-  }
+  };
 })();
