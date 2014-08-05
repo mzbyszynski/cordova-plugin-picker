@@ -114,17 +114,17 @@
     selectedRow = row;
     selectedComponent = component;
     // perform some action
-    NSLog(@"Selected row %ld",(long)row);
-    [self.plugin onPickerSelectionChange:[NSNumber numberWithLong:selectedRow] inComponent: [NSNumber numberWithLong:selectedComponent]];
+    if ([self.pickerViewTextField isFirstResponder]) {
+        NSLog(@"Selected row %ld",(long)row);
+        [self.plugin onPickerSelectionChange:[NSNumber numberWithLong:selectedRow] inComponent: [NSNumber numberWithLong:selectedComponent]];
+    }
 }
 
 -(void)selectRow:(int)row inComponent:(NSInteger)component animated:(BOOL)animated {
     selectedRow = row;
     selectedComponent = component;
     animateSelection = animated;
-    if ([self.pickerViewTextField isFirstResponder]) {
-        [self.pickerView selectRow:row inComponent:component animated:animated];
-    }
+   [self.pickerView selectRow:row inComponent:component animated:animated];
 }
 
 @end

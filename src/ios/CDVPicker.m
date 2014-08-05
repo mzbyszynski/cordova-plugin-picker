@@ -38,11 +38,11 @@
 -(void) show:(CDVInvokedUrlCommand*)command {
     _callbackId = command.callbackId;
     NSArray* options = [command.arguments objectAtIndex:0];
+    NSInteger selectedIndex = 0;
     if (command.arguments.count > 1)
-        self.pickerController.titleProperty = [command.arguments objectAtIndex:1 withDefault:@"text"];
-    else
-        self.pickerController.titleProperty = @"text";
-    [self pushOptionChanges:options];
+        selectedIndex = [[command.arguments objectAtIndex:1] integerValue];
+    NSLog(@"showing with selected row %ld", selectedIndex);
+    [self pushOptionChanges:options withSelectedRow:selectedIndex];
     // can't run code that shows keyboard in background thread because it need a web lock on the main/web thread.
     [self.pickerController showPicker];
     [self.commandDelegate runInBackground:^{
@@ -59,7 +59,10 @@
 -(void) updateOptions:(CDVInvokedUrlCommand*)command {
     _callbackId = command.callbackId;
     NSArray *options = [command.arguments objectAtIndex:0];
-    [self pushOptionChanges:options];
+    NSInteger selectedIndex = 0;
+    if (command.arguments.count > 1)
+        selectedIndex = [[command.arguments objectAtIndex:1] integerValue];
+    [self pushOptionChanges:options withSelectedRow:selectedIndex];
     [self.pickerController refreshChoics];
     if (_callbackId != nil) {
         [self.commandDelegate runInBackground:^{
@@ -79,15 +82,10 @@
     }
 }
 
--(void) pushOptionChanges:(NSArray*)options {
+-(void) pushOptionChanges:(NSArray*)options withSelectedRow:(NSInteger)row {
     self.pickerController.choices = options;
-    for (int i = 0; i < options.count; i++) {
-        NSDictionary *opt = [options objectAtIndex:i];
-        if ([opt objectForKey:@"selected"]) {
-            NSLog(@"Selecting %d",i);
-            [self.pickerController selectRow:i inComponent:0 animated:YES];
-        }
-    }
+    NSLog(@"Selecting %ld",(long)row);
+    [self.pickerController selectRow:(int)row inComponent:0 animated:YES];
 }
 
 -(void) onPickerSelectionChange:(NSNumber*)row inComponent:(NSNumber*)component {

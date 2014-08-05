@@ -1,3 +1,4 @@
+'use strict';
 module.exports = (function() {
 
   /**
@@ -16,23 +17,22 @@ module.exports = (function() {
     if (result.event === 'close' || result.event === 'select') {
       //TODO: if this is done on select, does it need to be done on close as well? Select should have already been fired?
       var selected, oldValue;
-      for (var i = 0; i < this._options.length; i++) {
-        if (i === result.row) {
-          selected = this._options[i];
-          selected.selected = true;
-        } else if (this._options[i].selected) {
-          oldValue = this._options[i];
-          oldValue.selected = false;
-        }
+      if (this._htmlOptions.selectedIndex >= 0)
+        oldValue = this._htmlOptions.item(this._htmlOptions.selectedIndex);
+      if (result.row >= 0) 
+        selected = this._htmlOptions.item(result.row);
+      if (result.event === 'close' && typeof this.onClose == 'function') { 
+        this._focusedIndex = undefined;
+        this._htmlOptions.selectedIndex = result.row;
+        this.onClose(selected, oldValue, this._htmlOptions);
+      } else if (result.event === 'select' && typeof this.onSelect == 'function') {
+        this._focusedIndex = result.row;
+        this.onSelect(selected, oldValue, this._htmlOptions);
       }
-      if (result.event === 'close' && typeof this.onClose == 'function') 
-        this.onHide(selected, oldValue);
-      else if (result.event === 'select' && typeof this.onSelect == 'function') 
-        this.onSelect(selected, oldValue);
     } else if (result.event === 'show' && typeof this.onShow == 'function')
       this.onShow();
     else if (result.event === 'change' && typeof this.onOptionsChange == 'function')
-      this.onOptionsChange(this._options);
+      this.onOptionsChange(this._htmlOptions);
     else if (result.event === 'error' && typeof this.onError == 'function') 
       this.onError(result.error);
   };
@@ -52,10 +52,10 @@ module.exports = (function() {
      * @property options
      */
     get options() {
-      return (this._options || []);
+      return this._htmlOptions;
     },
     set options(newOptions) {
-      this.update(newOptions || []);
+      this.update(newOptions);
     },
 
     /**
@@ -86,7 +86,7 @@ module.exports = (function() {
      */
     show: function() {
       console.log('showing picker');
-      cordova.exec(win.bind(this), this.onError, 'Picker', 'show', [(this._options || []), this.optionTitle]);
+      cordova.exec(win.bind(this), this.onError, 'Picker', 'show', [this._options, (this._focusedIndex || this._htmlOptions.selectedIndex || 0)]);
     },
 
     /**
@@ -107,9 +107,15 @@ module.exports = (function() {
      * @method update
      * @param {Array} list of options to display in the picker.
      */
-    update: function(newOptions) {
-      this._options = newOptions;
-      cordova.exec(win.bind(this), this.onError, 'Picker', 'updateOptions', [(this._options || [])]);
+    update: function(newOptions, resetSelection) {
+      this._htmlOptions = newOptions || this._htmlOptions;
+      if (resetSelection || !this._focusedIndex)
+        this._focusedIndex = this._htmlOptions.selectedIndex;
+      this._options = [];
+      for (var i = 0; i < this._htmlOptions.length; i++) {
+        this._options.push({text: this._htmlOptions[i].text});
+      }
+      cordova.exec(win.bind(this), this.onError, 'Picker', 'updateOptions', [this._options, (this._focusedIndex || this._htmlOptions.selectedIndex || 0)]);
     }
   };
 
