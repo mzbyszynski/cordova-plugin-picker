@@ -38,6 +38,7 @@ module.exports = (function() {
   var translateToNative = function(htmlOptions) {
     var out = [];
     for (var i = 0; i < htmlOptions.length; i++) {
+      console.log("option text is " + htmlOptions[i].text);
       out.push({text: htmlOptions[i].text});
     }
     console.log("pushing " + out.length + " options to picker controller");
