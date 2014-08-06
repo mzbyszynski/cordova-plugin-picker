@@ -73,7 +73,13 @@
 }
 
 -(void)showPicker {
-    [self.pickerViewTextField becomeFirstResponder];
+    if ([self.pickerViewTextField isFirstResponder]) {
+        NSLog(@"Picker is already showing");
+        [self refreshChoics];
+    } else {
+        NSLog(@"Showing PickerView");
+        [self.pickerViewTextField becomeFirstResponder];
+    }
 }
 
 -(void)hidePicker {
