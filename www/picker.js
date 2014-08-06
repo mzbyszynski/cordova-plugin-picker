@@ -11,7 +11,6 @@ module.exports = (function() {
   function Picker() {}
 
   var win = function(result) {
-    console.log('win returned ' + result.event + ' with row ' + result.row + ' and component ' + result.component);
     if (result.event === 'close' || result.event === 'select') {
       //TODO: if this is done on select, does it need to be done on close as well? Select should have already been fired?
       var selected, oldValue;
@@ -38,10 +37,8 @@ module.exports = (function() {
   var translateToNative = function(htmlOptions) {
     var out = [];
     for (var i = 0; i < htmlOptions.length; i++) {
-      console.log("option text is " + htmlOptions[i].text);
       out.push({text: htmlOptions[i].text});
     }
-    console.log("pushing " + out.length + " options to picker controller");
     return out;
   };
 
@@ -85,7 +82,6 @@ module.exports = (function() {
      * @method show
      */
     show: function() {
-      console.log('showing picker');
       cordova.exec(win.bind(this), this.onError, 'Picker', 'show', [translateToNative(this._htmlOptions), (this._focusedIndex || this._htmlOptions.selectedIndex || 0)]);
     },
 
@@ -123,7 +119,6 @@ module.exports = (function() {
    */   
   return {
     echo: function(msg, success, failure) {
-      console.log('Invoking CDVPicker.echo');
       cordova.exec(success, failure, 'Picker', 'echo', [msg]);
     },
 
