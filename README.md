@@ -44,7 +44,7 @@ Analagous to a &lt;select&gt; element instance, this object allows you to set `O
 ```
 
 ## Properties
-- __options__:
+- __options__: The `options` collection from an HTML `select` object. [See w3schools for more details](http://www.w3schools.com/jsref/coll_select_options.asp).
 
 ## Methods
 - __show__:
@@ -56,3 +56,4 @@ Analagous to a &lt;select&gt; element instance, this object allows you to set `O
 - __onShow__: 
 - __onClose__:
 - __onSelect__:
+- __onOptionsChange__:
