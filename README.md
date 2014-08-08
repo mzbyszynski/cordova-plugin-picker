@@ -63,7 +63,7 @@ Analagous to a &lt;select&gt; element instance, this object allows you to set `O
   2. Previously selected `Option` value (or `undefined` if there was no option previously selected).
   3. The select `options` collection.
 - __onSelect__: `function` that, if defined, will be called when the user changes the option in focus in the picker. This event will be called as the user scrolls through the picker whenever the scroll wheel comes to a stop. It does not indicate that the user has chosen a selection.  
--   _Parameters:_
+  _Parameters:_
   1. Newly focused `Option` DOM element.
   2. The currently selected `Option` value that was set prior to the picker being shown (or `undefined` if there was no option previously selected).
   3. The select `options` collection.
