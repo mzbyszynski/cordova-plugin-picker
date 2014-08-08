@@ -47,9 +47,12 @@ Analagous to a &lt;select&gt; element instance, this object allows you to set `O
 - __options__: The `options` collection from an HTML `select` object. [See w3schools for more details](http://www.w3schools.com/jsref/coll_select_options.asp).
 
 ## Methods
-- __show__:
-- __hide__:
-- __update__:
+- __show__: Shows the picker or refreshes the options if it is already shown. Invokes the onClose callback defined on this picker once the Picker is visible.
+- __hide__: Hides the picker if it is visible.
+- __update__: Updates the list of options displayed on the picker. 
+  
+  _Parameters:_
+  - __newOptions__: (Optional) a new Select options collection that will overwrite the current value defined by the `options` propety. If this parameter is not provided then the picker is refreshed based on the current state of this Picker's `options` property.
 
 ## Callbacks
 
