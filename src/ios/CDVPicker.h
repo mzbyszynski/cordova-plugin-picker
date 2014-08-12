@@ -2,8 +2,6 @@
 //  CDVPicker.h
 //  Picker
 //
-//  Created by Verifi Cloud Patform on 7/23/14.
-//
 //
 
 #import <Cordova/CDV.h>
@@ -14,6 +12,8 @@
 }
 
 @property (strong, nonatomic) CDVPickerViewController* pickerController;
+@property (nonatomic, assign) BOOL enableBackButton;
+@property (nonatomic, assign) BOOL enableForwardButton;
 
 -(void) echo:(CDVInvokedUrlCommand*)command;
 -(void) show:(CDVInvokedUrlCommand*)command;
@@ -21,5 +21,7 @@
 -(void) updateOptions:(CDVInvokedUrlCommand*)command;
 -(void) onPickerClose:(NSNumber*)row inComponent:(NSNumber*)component;
 -(void) onPickerSelectionChange:(NSNumber*)row inComponent:(NSNumber*)component;
+-(void) onGoToNext;
+-(void) onGoToPrevious;
 
 @end

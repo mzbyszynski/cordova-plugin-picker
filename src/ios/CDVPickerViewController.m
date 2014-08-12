@@ -2,8 +2,6 @@
 //  CDVPickerViewController.m
 //  Picker
 //
-//  Created by Verifi Cloud Patform on 7/23/14.
-//
 //
 #import <UIKit/UIKit.h>
 #import "CDVPicker.h"
@@ -15,11 +13,12 @@
     NSInteger selectedRow;
     NSInteger selectedComponent;
     BOOL animateSelection;
-
 }
 
 @property (nonatomic, strong) UITextField *pickerViewTextField;
 @property (nonatomic, strong) UIPickerView *pickerView;
+@property (nonatomic, strong) UIBarButtonItem *forwardButton;
+@property (nonatomic, strong) UIBarButtonItem *backButton;
 
 @end
 
@@ -29,6 +28,8 @@
 @synthesize choices = _choices;
 @synthesize pickerView = _pickerView;
 @synthesize titleProperty = _titleProperty;
+@synthesize forwardButton = _forwardButton;
+@synthesize backButton = _backButton;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -61,8 +62,11 @@
     self.pickerViewTextField.inputView = self.pickerView;
     
     UIToolbar *toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0,0,320,44)];
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(cancelTouched:)];
-    [toolBar setItems:[NSArray arrayWithObjects:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil], closeButton, nil]];
+    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(cancelTouched:)];
+    closeButton.style = UIBarButtonSystemItemDone;
+    self.backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:105 target:self action:@selector(goToPrevious:)];
+    self.forwardButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:106 target:self action:@selector(goToNext:)];
+    [toolBar setItems:[NSArray arrayWithObjects: self.backButton, self.forwardButton, [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil], closeButton, nil]];
     self.pickerViewTextField.inputAccessoryView = toolBar;
 }
 
@@ -73,9 +77,11 @@
 }
 
 -(void)showPicker {
+    self.backButton.enabled = self.plugin.enableBackButton;
+    self.forwardButton.enabled = self.plugin.enableForwardButton;
     if ([self.pickerViewTextField isFirstResponder]) {
         NSLog(@"Picker is already showing");
-        [self refreshChoics];
+        [self refreshChoices];
     } else {
         NSLog(@"Showing PickerView");
         [self.pickerViewTextField becomeFirstResponder];
@@ -87,7 +93,9 @@
     [self.plugin onPickerClose: [NSNumber numberWithLong:selectedRow] inComponent: [NSNumber numberWithLong:selectedComponent]];
 }
 
--(void)refreshChoics {
+-(void)refreshChoices {
+    self.backButton.enabled = self.plugin.enableBackButton;
+    self.forwardButton.enabled = self.plugin.enableForwardButton;
     if (self.pickerView != nil)
         [self.pickerView reloadAllComponents];
 }
@@ -95,6 +103,18 @@
 - (void)cancelTouched:(UIBarButtonItem *)sender
 {
     [self hidePicker];
+}
+
+- (void) goToNext:(UIBarButtonItem *)sender
+{
+    [self.pickerViewTextField resignFirstResponder];
+    [self.plugin onGoToNext];
+}
+
+- (void) goToPrevious:(UIBarButtonItem *)sender
+{
+    [self.pickerViewTextField resignFirstResponder];
+    [self.plugin onGoToPrevious];
 }
 
 #pragma mark - UIPickerViewDataSource

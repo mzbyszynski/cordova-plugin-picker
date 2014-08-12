@@ -2,8 +2,6 @@
 //  CDVPickerViewController.h
 //  Picker
 //
-//  Created by Verifi Cloud Patform on 7/23/14.
-//
 //
 
 #import <UIKit/UIKit.h>
@@ -22,6 +20,6 @@
 
 -(void)selectRow:(int)row inComponent:(NSInteger)component animated:(BOOL)animated;
 
--(void)refreshChoics;
+-(void)refreshChoices;
 
 @end
