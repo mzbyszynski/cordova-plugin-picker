@@ -1,4 +1,6 @@
-# org.apache.cordova.picker
+# org.apache.cordova.picker [Deprecated]
+https://github.com/mzbyszynski/cordova-plugin-dynamic-select provides a better solution for this so you should use that instead.
+-------------
 This plugin allows for more dynamic access to the picker widget normally displayed when a &lt;select&gt; is tapped, in particular on ios.
 ```sh
 cordova plugin add https://github.com/mzbyszynski/cordova-plugin-picker.git
